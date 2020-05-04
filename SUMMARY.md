@@ -33,8 +33,6 @@
   * [网络流量控制与拥塞控制详述](ji-suan-ji-wang-luo/wang-luo-liu-liang-kong-zhi-yu-yong-sai-kong-zhi-xiang-shu.md)
   * [HTTPS有何不同](ji-suan-ji-wang-luo/https-you-he-bu-tong.md)
 * [算法分析篇](suan-fa-fen-xi/README.md)
-  * [B树](suan-fa-fen-xi/hong-hei-shu.md)
-  * [B树](suan-fa-fen-xi/b-shu.md)
   * [尾递归优化小记](suan-fa-fen-xi/wei-di-gui-you-hua-xiao-ji.md)
   * [简单隐写与分析技术的实现](suan-fa-fen-xi/jian-dan-yin-xie-yu-fen-xi-ji-shu-de-shi-xian.md)
   * [七大排序快速记忆](suan-fa-fen-xi/qi-da-pai-xu-kuai-su-ji-yi.md)
