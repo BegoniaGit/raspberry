@@ -7,7 +7,7 @@ java虚拟机垃圾回收器目前共7个,分别是serial,parnew,
 Serial,ParNew,Parallel Scavenge,Serial Old,Parallel Old,CMS和G1收集器.
 
 ## 1. 五种基本垃圾回收器概览
-![](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/五种垃圾收集器.jpg)
+![](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/五种垃圾收集器.jpg)
 传送门[五种收集器介绍清晰的文章](https://blog.csdn.net/u011080472/article/details/51324422)
 
 ### 1.1 五种算法的总结
@@ -23,7 +23,7 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取**最短回收停顿时
 - **重新标记**： 重新标记阶段就是为了修正并发标记期间因为用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段的时间稍长，远远比并发标记阶段时间短.
 - **并发清除**： 开启用户线程，同时GC线程开始对未标记的区域做清扫。
   如图([图片引用自这里](https://blog.csdn.net/u011080472/article/details/51324422)):
-  ![CMS垃圾回收图](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/CMS垃圾回收图.jpg)
+  ![CMS垃圾回收图](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/CMS垃圾回收图.jpg)
 从它的名字就可以看出它是一款优秀的垃圾收集器,总的来看,CMS收集器细化了垃圾收集过程,其中迫不得已独占线程,才使用线程独占,其余都尽量使用了并发,从而降低了系统停顿的时间,也就提高了用户体验感.总结优缺点如下:
 主要优点：
 1.并发收集(总体而言,并发标记和并发清除占用时间较长,初始标记和重新标记占用时间短很多)
@@ -52,12 +52,12 @@ G1收集器的运作大致分为以下几个步骤：
 - **筛选回收**: 回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。
 
 上面几个步骤的运作过程和CMS有很多相似之处。初始标记阶段仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS的值，让下一个阶段用户程序并发运行时，能在正确可用的Region中创建新对象，这一阶段需要停顿线程，但是耗时很短，并发标记阶段是从GC Root开始对堆中对象进行可达性分析，找出存活的对象，这阶段时耗时较长，但可与用户程序并发执行。最终标记阶段则是修正在并发标记阶段因为用户程序的并发执行而导致标记产生变动的那一部分记录，这部分记录被保存在Remembered Set Logs中，最终标记阶段再把Logs中的记录合并到Remembered Set中，这个阶段是并行执行的，仍然需要暂停用户线程。最后在筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。如图(图片来源同上):
-![G1回收图](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/G1回收图.jpg)
+![G1回收图](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1回收图.jpg)
 
 ## 4. G1分区模型
 在G1之前的垃圾收集器，将堆区主要划分了Eden区，Old区，Survivor区。其中对于Eden，Survivor对回收过程来说叫做“年轻代垃圾收集”。并且年轻代和老年代都分别是连续的内存空间。 
 G1将堆分成了若干Region,以下和”分区”代表同一概念。Region的大小可以通过G1HeapRegionSize参数进行设置，其必须是2的幂，范围允许为1Mb到32Mb。 JVM的会基于堆内存的初始值和最大值的平均数计算分区的尺寸，平均的堆尺寸会分出约2000个Region。分区大小一旦设置，则启动之后不会再变化。如下图简单画了下G1分区模型。
-![G1分区模型](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/G1分区模型.png)
+![G1分区模型](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1分区模型.png)
 1.Eden regions(年轻代-Eden区)
 2.Survivor regions(年轻代-Survivor区) 
 3.Old regions（老年代）

@@ -4,7 +4,7 @@ java,垃圾回收
 #### 1.1.1 JVM结构初始
 虚拟机结构图
 
-![JVM结构图](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/JVM结构图.jpg)
+![JVM结构图](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/JVM结构图.jpg)
 
 1.程序计数器:
 因为线程会切换,因此每个线程独有一份,用作在执行过程中记录编译后的class文件行号.
@@ -33,10 +33,10 @@ java,垃圾回收
 1. 句柄池
 - 句柄池从堆中划分
 - 由实例地址和类型数据地址构成,如图：
-![句柄池访问](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/句柄池访问.jpg)
+![句柄池访问](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/句柄池访问.jpg)
 2. 指针
 - 可直接通过指针访问到实例对象，如图
-![地址访问对象实例](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/地址访问对象实例.jpg)
+![地址访问对象实例](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/地址访问对象实例.jpg)
 #### 1.4.2 优劣
 句柄的使用,方便了实例位置的改变,可以不改变引用,但是访问速度相对于指针低一些.
 
@@ -73,7 +73,7 @@ java,垃圾回收
 4. **分代收集算法:** 此方法与上面三种不属于一个层次，属于更高层面的收集算法。根据内存中对象的存活周期不同，将内存划分为几块，java的虚拟机中一般把内存划分为新生代和年老代，当新创建对象时一般在新生代中分配内存空间，当新生代垃圾收集器回收几次之后仍然存活的对象会被移动到年老代内存中，当大对象在新生代中无法找到足够的连续内存时也直接在年老**代中创建。现在的Java虚拟机就联合使用了分代复制、标记-清除和标记-整理算法.**
  java虚拟机垃圾收集器关注的内存结构如下：
 
-![新生代与老年代示意图](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/新生代与老年代示意图.jpg)
+![新生代与老年代示意图](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/新生代与老年代示意图.jpg)
 
 ##### 新生代
 研究表明，新生代中98%的对象是朝生夕死的短生命周期对象，所以不需要将新生代划分为容量大小相等的两部分内存，而是将新生代分为Eden区，Survivor from和Survivor to三部分，其占新生代内存容量默认比例分别为8：1：1，其中Survivor from和Survivor to总有一个区域是空白，只有Eden和其中一个Survivor总共90%的新生代容量用于为新创建的对象分配内存，只有10%的Survivor内存浪费，当新生代内存空间不足需要进行垃圾回收时，仍然存活的对象被复制到空白的Survivor内存区域中，Eden和非空白的Survivor进行**标记-清理**回收，两个Survivor区域是轮换的。
@@ -101,7 +101,7 @@ Full GC: 是清理整个堆空间—包括年轻代和老年代。
 
 #### 附:JVM参数整理
 ##### 参数调优建议
-![图片描述](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/堆分配策略表.png)
+![图片描述](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/堆分配策略表.png)
 - 永久代:**-XX:PermSize20M -XX:MaxPermSize20M**
 - 堆大小:   **-Xms20M -Xmx20M** 
 - 新生代: **-Xmn10M** 

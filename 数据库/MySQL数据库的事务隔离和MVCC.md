@@ -41,7 +41,7 @@
 ````mysql
 SELECT @@global.tx_isolation, @@tx_isolation;
 ````
-![事务隔离级别1](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/事务隔离级别1.jpg)
+![事务隔离级别1](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/事务隔离级别1.jpg)
 2. 修改全局或会话的事务隔离级别
 ````
 SET [SESSION|GLOBAL] TRANSACTION ISOLATION LEVEL [READ UNCOMMITTED|READ COMMITTED|REPEATABLE READ|SERIALIZABLE]
@@ -81,7 +81,7 @@ SET [SESSION|GLOBAL] TRANSACTION ISOLATION LEVEL [READ UNCOMMITTED|READ COMMITTE
 #### 8.4 CAS算法
 1. 核心思想:Compare and Swap，即比较再交换。
 2. 过程:假设有A线程准备去修改内存中变量名为name的值,因此A线程会用以前自己读到的name变量值和此刻name的值做对比,如果一样,则表明在变量值没被修改过,因此可以更新修改,否则更新失败.
-![CAS算法](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/CAS算法图解.jpg)
+![CAS算法](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/CAS算法图解.jpg)
 ### 9. 回到MySQL的重复读(Repeated Read)事务隔离级别
 前面说过,MySQL默认实现了可重复读的事务隔离级别,但是不能解决幻读的问题,然而在MySQL数据库使用可重复读的事务隔离条件下,并未发生幻读.MySQL使用MVCC(多版本并发控制)进行了控制.
 #### 9.1名词简析:
@@ -103,7 +103,7 @@ REPEATABLE READ隔离级别(除了GAP锁之外)和READ COMMITTED隔离级别的�
 如果trx_id>trx_id_max的话，那么表明该行记录所在的事务在本次新事务创建之后才开启，所以该行记录的当前值不可见。
 如果trx_id_min <= trx_id <= trx_id_max, 那么表明该行记录所在事务在本次新事务创建的时候处于活动状态，从trx_id_min到trx_id_max进行遍历，如果trx_id等于他们之中的某个事务id的话，那么不可见,如图：
 
-![可见流程图](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/可见流程图.jpg)
+![可见流程图](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/可见流程图.jpg)
 
 从该行记录的DB_ROLL_PTR指针所指向的回滚段中取出最新的undo-log的版本号的数据，将该可见行的值返回。
 需要注意的是，新建事务(当前事务)与正在内存中commit 的事务不在活跃事务链表中。
@@ -132,7 +132,7 @@ read_view中保存了当前全局的事务的范围：
         　　}
 ````
 **Read view 图解**：
-![图解](https://raw.githubusercontent.com/CrabappleProject/raspberry/master/extra/img/readView图解.jpg)
+![图解](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/readView图解.jpg)
 
 参考引用[MySQL源码分析](https://yq.aliyun.com/articles/560506)
 ## 结语
