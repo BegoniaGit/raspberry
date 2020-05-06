@@ -1,7 +1,5 @@
 # 深入HashMap源代码
 
-java,HashMap
-
 HashMap中Node类的成员变量:
 
 ```java

@@ -10,7 +10,11 @@ java虚拟机垃圾回收器目前共7个,分别是serial,parnew, 传送门:[回
 
 ### 1. 五种基本垃圾回收器概览
 
-![](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/五种垃圾收集器.jpg) 传送门[五种收集器介绍清晰的文章](https://blog.csdn.net/u011080472/article/details/51324422)
+ 
+
+![](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/五种垃圾收集器.jpg)
+
+传送门[五种收集器介绍清晰的文章](https://blog.csdn.net/u011080472/article/details/51324422)
 
 #### 1.1 五种算法的总结
 
@@ -27,7 +31,7 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取**最短回收停顿时
 
   如图\([图片引用自这里](https://blog.csdn.net/u011080472/article/details/51324422)\):
 
-  ![CMS&#x5783;&#x573E;&#x56DE;&#x6536;&#x56FE;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/CMS垃圾回收图.jpg)
+
 
   从它的名字就可以看出它是一款优秀的垃圾收集器,总的来看,CMS收集器细化了垃圾收集过程,其中迫不得已独占线程,才使用线程独占,其余都尽量使用了并发,从而降低了系统停顿的时间,也就提高了用户体验感.总结优缺点如下:
 
@@ -44,6 +48,8 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取**最短回收停顿时
   2.无法处理浮动垃圾:因为第二步不能实时.
 
   3.它使用的回收算法-“标记-清除”算法会导致收集结束时会有大量空间碎片产生。
+
+![CMS&#x5783;&#x573E;&#x56DE;&#x6536;&#x56FE;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/CMS垃圾回收图.jpg)
 
 ### 3. G1收集器\(最新成果\)
 
@@ -63,11 +69,15 @@ G1收集器的运作大致分为以下几个步骤：
 * **最终标记**:修正在并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录.
 * **筛选回收**: 回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。
 
-上面几个步骤的运作过程和CMS有很多相似之处。初始标记阶段仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS的值，让下一个阶段用户程序并发运行时，能在正确可用的Region中创建新对象，这一阶段需要停顿线程，但是耗时很短，并发标记阶段是从GC Root开始对堆中对象进行可达性分析，找出存活的对象，这阶段时耗时较长，但可与用户程序并发执行。最终标记阶段则是修正在并发标记阶段因为用户程序的并发执行而导致标记产生变动的那一部分记录，这部分记录被保存在Remembered Set Logs中，最终标记阶段再把Logs中的记录合并到Remembered Set中，这个阶段是并行执行的，仍然需要暂停用户线程。最后在筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。如图\(图片来源同上\): ![G1&#x56DE;&#x6536;&#x56FE;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1回收图.jpg)
+上面几个步骤的运作过程和CMS有很多相似之处。初始标记阶段仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS的值，让下一个阶段用户程序并发运行时，能在正确可用的Region中创建新对象，这一阶段需要停顿线程，但是耗时很短，并发标记阶段是从GC Root开始对堆中对象进行可达性分析，找出存活的对象，这阶段时耗时较长，但可与用户程序并发执行。最终标记阶段则是修正在并发标记阶段因为用户程序的并发执行而导致标记产生变动的那一部分记录，这部分记录被保存在Remembered Set Logs中，最终标记阶段再把Logs中的记录合并到Remembered Set中，这个阶段是并行执行的，仍然需要暂停用户线程。最后在筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。如图\(图片来源同上\): 
+
+![G1&#x56DE;&#x6536;&#x56FE;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1回收图.jpg)
 
 ### 4. G1分区模型
 
-在G1之前的垃圾收集器，将堆区主要划分了Eden区，Old区，Survivor区。其中对于Eden，Survivor对回收过程来说叫做“年轻代垃圾收集”。并且年轻代和老年代都分别是连续的内存空间。 G1将堆分成了若干Region,以下和”分区”代表同一概念。Region的大小可以通过G1HeapRegionSize参数进行设置，其必须是2的幂，范围允许为1Mb到32Mb。 JVM的会基于堆内存的初始值和最大值的平均数计算分区的尺寸，平均的堆尺寸会分出约2000个Region。分区大小一旦设置，则启动之后不会再变化。如下图简单画了下G1分区模型。 ![G1&#x5206;&#x533A;&#x6A21;&#x578B;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1分区模型.png) 1.Eden regions\(年轻代-Eden区\) 2.Survivor regions\(年轻代-Survivor区\) 3.Old regions（老年代） 4.Humongous regions（巨型对象区域） 5.Free resgions（未分配区域，也会叫做可用分区）-上图中空白的区域
+在G1之前的垃圾收集器，将堆区主要划分了Eden区，Old区，Survivor区。其中对于Eden，Survivor对回收过程来说叫做“年轻代垃圾收集”。并且年轻代和老年代都分别是连续的内存空间。 G1将堆分成了若干Region,以下和”分区”代表同一概念。Region的大小可以通过G1HeapRegionSize参数进行设置，其必须是2的幂，范围允许为1Mb到32Mb。 JVM的会基于堆内存的初始值和最大值的平均数计算分区的尺寸，平均的堆尺寸会分出约2000个Region。分区大小一旦设置，则启动之后不会再变化。如下图简单画了下G1分区模型。  1.Eden regions\(年轻代-Eden区\) 2.Survivor regions\(年轻代-Survivor区\) 3.Old regions（老年代） 4.Humongous regions（巨型对象区域） 5.Free resgions（未分配区域，也会叫做可用分区）-上图中空白的区域
+
+![G1&#x5206;&#x533A;&#x6A21;&#x578B;](https://shaosim-image.oss-cn-chengdu.aliyuncs.com/G1分区模型.png)
 
 #### 分区有几个重要的概念：
 
