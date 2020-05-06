@@ -14,6 +14,8 @@
 * [Scala 篇](scala-pian.md)
 * [Golang 篇](golang-pian/README.md)
   * [Golang 基础](golang-pian/golang-ji-chu.md)
+* [Prometheus 指标篇](prometheus-zhi-biao-pian/README.md)
+  * [Metrics 与 PromQL 的使用参考](prometheus-zhi-biao-pian/metrics-yu-promql-de-shi-yong-can-kao.md)
 * [服务器篇](fu-wu-qi/README.md)
   * [命令行](fu-wu-qi/ming-ling-hang.md)
   * [安装 RabbitMQ 服务端](fu-wu-qi/an-zhuang-rabbitmq-fu-wu-duan.md)
